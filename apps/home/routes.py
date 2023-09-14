@@ -16,7 +16,6 @@ def get_context(segment):
     return context
 
 @blueprint.route('/beranda')
-@login_required
 def beranda():
     username = get_username()
     return render_template('home/index.html', segment='index', username=username)
