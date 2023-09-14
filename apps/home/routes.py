@@ -38,7 +38,6 @@ def video_chunk():
     return Response(chunk, content_type='video/mp4')
 
 @blueprint.route('/kamus', methods=['GET', 'POST'])
-@login_required
 def kamus():
     output_folder = os.path.join(current_app.root_path, 'static', 'kamusku')
 
