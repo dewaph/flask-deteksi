@@ -133,138 +133,138 @@ def add_space():
 
     return jsonify({"message": "Spasi berhasil ditambahkan ke file."}), 200
 
-# def generate_frames():
-#     global cap, start_time
-#     # Inisialisasi webcam dan variabel lainnya
-#     cap = cv2.VideoCapture(0)
-#     mp_hands = mp.solutions.hands
-#     mp_drawing = mp.solutions.drawing_utils
-#     mp_drawing_styles = mp.solutions.drawing_styles
+def generate_frames():
+    global cap, start_time
+    # Inisialisasi webcam dan variabel lainnya
+    cap = cv2.VideoCapture(0)
+    mp_hands = mp.solutions.hands
+    mp_drawing = mp.solutions.drawing_utils
+    mp_drawing_styles = mp.solutions.drawing_styles
 
-#     hands = mp_hands.Hands(static_image_mode=True, max_num_hands=2, min_detection_confidence=0.3)
+    hands = mp_hands.Hands(static_image_mode=True, max_num_hands=2, min_detection_confidence=0.3)
 
-#     model_dict1 = pickle.load(open('apps/static/model/model1.p', 'rb'))
-#     model_dict2 = pickle.load(open('apps/static/model/model2.p', 'rb'))
-#     model1 = model_dict1['model1']
-#     model2 = model_dict2['model2']
+    model_dict1 = pickle.load(open('apps/static/model/model1.p', 'rb'))
+    model_dict2 = pickle.load(open('apps/static/model/model2.p', 'rb'))
+    model1 = model_dict1['model1']
+    model2 = model_dict2['model2']
 
-#     labels_dict1 = {0: 'C', 1: 'E', 2: 'I', 3: 'J', 4: 'L', 5: 'O', 6: 'R', 7: 'U', 8: 'V', 9: 'Z'}
-#     labels_dict2 = {0: 'A', 1: 'B', 2: 'D', 3: 'F', 4: 'G', 5: 'H', 6: 'K', 7: 'M', 8: 'N', 9: 'P',
-#                         10: 'Q', 11: 'S', 12: 'T', 13: 'W', 14: 'X', 15: 'Y'}
+    labels_dict1 = {0: 'C', 1: 'E', 2: 'I', 3: 'J', 4: 'L', 5: 'O', 6: 'R', 7: 'U', 8: 'V', 9: 'Z'}
+    labels_dict2 = {0: 'A', 1: 'B', 2: 'D', 3: 'F', 4: 'G', 5: 'H', 6: 'K', 7: 'M', 8: 'N', 9: 'P',
+                        10: 'Q', 11: 'S', 12: 'T', 13: 'W', 14: 'X', 15: 'Y'}
 
-#     start_time = None
+    start_time = None
 
-#     while True:
-#         data_aux = []
-#         x_ = []  # Initialize the x_ list for hand landmarks
-#         y_ = []  # Initialize the y_ list for hand landmarks
+    while True:
+        data_aux = []
+        x_ = []  # Initialize the x_ list for hand landmarks
+        y_ = []  # Initialize the y_ list for hand landmarks
 
-#         ret, frame = cap.read()
+        ret, frame = cap.read()
 
-#         if not ret:
-#             break
+        if not ret:
+            break
 
-#         cv2.putText(frame, 'Mulai Menerjemahkan', (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 3,
-#                     cv2.LINE_AA)
+        cv2.putText(frame, 'Mulai Menerjemahkan', (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 3,
+                    cv2.LINE_AA)
 
-#         H, W, _ = frame.shape
+        H, W, _ = frame.shape
 
-#         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-#         results = hands.process(frame_rgb)
-#         if results.multi_hand_landmarks:
-#             n = len(results.multi_hand_landmarks)
-#             for hand_landmarks in results.multi_hand_landmarks:
-#                 mp_drawing.draw_landmarks(
-#                     frame,  # image to draw
-#                     hand_landmarks,  # model output
-#                     mp_hands.HAND_CONNECTIONS,  # hand connections
-#                     mp_drawing_styles.get_default_hand_landmarks_style(),
-#                     mp_drawing_styles.get_default_hand_connections_style())
+        results = hands.process(frame_rgb)
+        if results.multi_hand_landmarks:
+            n = len(results.multi_hand_landmarks)
+            for hand_landmarks in results.multi_hand_landmarks:
+                mp_drawing.draw_landmarks(
+                    frame,  # image to draw
+                    hand_landmarks,  # model output
+                    mp_hands.HAND_CONNECTIONS,  # hand connections
+                    mp_drawing_styles.get_default_hand_landmarks_style(),
+                    mp_drawing_styles.get_default_hand_connections_style())
 
-#             for hand_landmarks in results.multi_hand_landmarks:
-#                 for i in range(len(hand_landmarks.landmark)):
-#                     x = hand_landmarks.landmark[i].x
-#                     y = hand_landmarks.landmark[i].y
+            for hand_landmarks in results.multi_hand_landmarks:
+                for i in range(len(hand_landmarks.landmark)):
+                    x = hand_landmarks.landmark[i].x
+                    y = hand_landmarks.landmark[i].y
 
-#                     x_.append(x)
-#                     y_.append(y)
+                    x_.append(x)
+                    y_.append(y)
 
-#                 for i in range(len(hand_landmarks.landmark)):
-#                     x = hand_landmarks.landmark[i].x
-#                     y = hand_landmarks.landmark[i].y
-#                     data_aux.append(x - min(x_))
-#                     data_aux.append(y - min(y_))
+                for i in range(len(hand_landmarks.landmark)):
+                    x = hand_landmarks.landmark[i].x
+                    y = hand_landmarks.landmark[i].y
+                    data_aux.append(x - min(x_))
+                    data_aux.append(y - min(y_))
 
-#             if n == 1:
-#                 x1 = int(min(x_) * W) - 10
-#                 y1 = int(min(y_) * H) - 10
+            if n == 1:
+                x1 = int(min(x_) * W) - 10
+                y1 = int(min(y_) * H) - 10
 
-#                 x2 = int(max(x_) * W) - 10
-#                 y2 = int(max(y_) * H) - 10
+                x2 = int(max(x_) * W) - 10
+                y2 = int(max(y_) * H) - 10
 
-#                 if start_time is None:
-#                     start_time = time.time()  # Set waktu awal jika belum diinisialisasi
+                if start_time is None:
+                    start_time = time.time()  # Set waktu awal jika belum diinisialisasi
 
-#                 if start_time is not None and time.time() - start_time >= 1.5:
-#                     prediction1 = model1.predict([np.asarray(data_aux)])
-#                     predicted_character = labels_dict1[int(prediction1[0])]
-
-
-#                     # Tambahkan hasil prediksi huruf selanjutnya
-#                     if predicted_character != ' ':
-#                         with open("transcript.txt", "a") as f:
-#                             f.write(predicted_character)
-
-#                     start_time = None  # Reset waktu awal
-
-#             else:
-#                 x1 = int(min(x_) * W) - 10
-#                 y1 = int(min(y_) * H) - 10
-
-#                 x2 = int(max(x_) * W) - 10
-#                 y2 = int(max(y_) * H) - 10
-
-#                 if start_time is None:
-#                     start_time = time.time()  # Set waktu awal jika belum diinisialisasi
-
-#                 if start_time is not None and time.time() - start_time >= 1.5:
-#                     prediction2 = model2.predict([np.asarray(data_aux)])
-#                     predicted_character = labels_dict2[int(prediction2[0])]
+                if start_time is not None and time.time() - start_time >= 1.5:
+                    prediction1 = model1.predict([np.asarray(data_aux)])
+                    predicted_character = labels_dict1[int(prediction1[0])]
 
 
-#                     # Tambahkan hasil prediksi huruf selanjutnya
-#                     if predicted_character != ' ':
-#                         with open("transcript.txt", "a") as f:
-#                             f.write(predicted_character)
+                    # Tambahkan hasil prediksi huruf selanjutnya
+                    if predicted_character != ' ':
+                        with open("transcript.txt", "a") as f:
+                            f.write(predicted_character)
 
-#                     start_time = None  # Reset waktu awal
+                    start_time = None  # Reset waktu awal
+
+            else:
+                x1 = int(min(x_) * W) - 10
+                y1 = int(min(y_) * H) - 10
+
+                x2 = int(max(x_) * W) - 10
+                y2 = int(max(y_) * H) - 10
+
+                if start_time is None:
+                    start_time = time.time()  # Set waktu awal jika belum diinisialisasi
+
+                if start_time is not None and time.time() - start_time >= 1.5:
+                    prediction2 = model2.predict([np.asarray(data_aux)])
+                    predicted_character = labels_dict2[int(prediction2[0])]
+
+
+                    # Tambahkan hasil prediksi huruf selanjutnya
+                    if predicted_character != ' ':
+                        with open("transcript.txt", "a") as f:
+                            f.write(predicted_character)
+
+                    start_time = None  # Reset waktu awal
         
-#         ret, buffer = cv2.imencode('.jpg', frame)
-#         frame_bytes = buffer.tobytes()
-#         yield (b'--frame\r\n'
-#                 b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+        ret, buffer = cv2.imencode('.jpg', frame)
+        frame_bytes = buffer.tobytes()
+        yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
         
-#     # Setelah loop selesai, lepaskan kamera
-#     cap.release()
+    # Setelah loop selesai, lepaskan kamera
+    cap.release()
 
-#     # Tutup semua jendela OpenCV
-#     cv2.destroyAllWindows()
+    # Tutup semua jendela OpenCV
+    cv2.destroyAllWindows()
 
-# @blueprint.route('/video_feed')
-# def video_feed():
-#     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+@blueprint.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-# @blueprint.route('/close')
-# def close():
-#     # Setelah loop selesai, lepaskan kamera
-#     cap.release()
-#     with open("transcript.txt", "w") as f:
-#         f.truncate(0)
+@blueprint.route('/close')
+def close():
+    # Setelah loop selesai, lepaskan kamera
+    cap.release()
+    with open("transcript.txt", "w") as f:
+        f.truncate(0)
 
-#     # Tutup semua jendela OpenCV
-#     cv2.destroyAllWindows()
-#     return"tutup windows"
+    # Tutup semua jendela OpenCV
+    cv2.destroyAllWindows()
+    return"tutup windows"
     
         
 def generate_transcript():
