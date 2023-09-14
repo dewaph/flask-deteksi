@@ -1,19 +1,25 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-
 from apps.home import blueprint
 from flask import render_template, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 
+def resize_image(image, size):
+    resized_image = image.resize(size)
+    return resized_image
+
+def get_username():
+    return current_user.username if current_user.is_authenticated else None
+
+def get_context(segment):
+    context = {'segment': segment}
+    context['username'] = current_user.username if current_user.is_authenticated else None
+    return context
 
 @blueprint.route('/beranda')
 @login_required
 def beranda():
-
-    return render_template('home/index.html', segment='index')
+    username = get_username()
+    return render_template('home/index.html', segment='index', username=username)
 
 
 @blueprint.route('/<template>')
