@@ -14,7 +14,7 @@ python-dotenv==0.19.2
 Flask-Minify==0.37
 moviepy==1.0.3
 Pillow==10.0.0
-opencv-python-headless==4.2.0.32
+opencv-python-headless
 mediapipe==0.10.3
 gTTS==2.3.2
 scikit-learn==1.2.0
