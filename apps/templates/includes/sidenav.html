@@ -37,7 +37,7 @@
       <li class="nav-item">
         <a
         class="nav-link {% if 'kamus' in request.path %} active {% endif %}"
-        href=""
+        href="{{ url_for('home_blueprint.kamus') }}"
         >
           <div
             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center"

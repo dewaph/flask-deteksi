@@ -4,8 +4,8 @@ from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 import os
 import io
-# from PIL import Image
-# from moviepy.editor import VideoFileClip, concatenate_videoclips
+from PIL import Image
+from moviepy.editor import VideoFileClip, concatenate_videoclips
 import cv2
 import mediapipe as mp
 import pickle
@@ -44,70 +44,70 @@ def video_chunk():
         
     return Response(chunk, content_type='video/mp4')
 
-# @blueprint.route('/kamus', methods=['GET', 'POST'])
-# def kamus():
-#     output_folder = os.path.join(current_app.root_path, 'static', 'kamusku')
+@blueprint.route('/kamus', methods=['GET', 'POST'])
+def kamus():
+    output_folder = os.path.join(current_app.root_path, 'static', 'kamusku')
 
-#     if not os.path.exists(output_folder):
-#         os.makedirs(output_folder)
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
 
-#     if request.method == "POST":
-#         user_input = request.form.get("user_input").upper()
+    if request.method == "POST":
+        user_input = request.form.get("user_input").upper()
 
-#         num_columns = 4  # Jumlah kolom yang diinginkan
+        num_columns = 4  # Jumlah kolom yang diinginkan
         
-#         video_clips = []
+        video_clips = []
 
-#         if user_input:
-#             alphabet_chunks = [user_input[i:i + num_columns] for i in range(0, len(user_input), num_columns)]
-#             image_number = 0
-#             for chunk in alphabet_chunks:
-#                 for i, letter in enumerate(chunk):
-#                     image_number += 1
-#                     image_path = os.path.join(output_folder, f"{letter}.png")
+        if user_input:
+            alphabet_chunks = [user_input[i:i + num_columns] for i in range(0, len(user_input), num_columns)]
+            image_number = 0
+            for chunk in alphabet_chunks:
+                for i, letter in enumerate(chunk):
+                    image_number += 1
+                    image_path = os.path.join(output_folder, f"{letter}.png")
 
-#                     if os.path.exists(image_path):
-#                         image = Image.open(image_path)
-#                         resized_image = resize_image(image, (200, 200))
-#                         resized_image.save(image_path)
+                    if os.path.exists(image_path):
+                        image = Image.open(image_path)
+                        resized_image = resize_image(image, (200, 200))
+                        resized_image.save(image_path)
 
-#                     video_path = os.path.join(output_folder, f"{letter}.mp4")
+                    video_path = os.path.join(output_folder, f"{letter}.mp4")
 
-#                     if os.path.exists(video_path):
-#                         video_clip = VideoFileClip(video_path)
-#                         video_clips.append(video_clip)
+                    if os.path.exists(video_path):
+                        video_clip = VideoFileClip(video_path)
+                        video_clips.append(video_clip)
 
-#             if video_clips:
-#                 combined_clip = concatenate_videoclips(video_clips)
-#                 combined_video_file = os.path.join(output_folder, "combined_video.mp4")
-#                 combined_clip.write_videofile(combined_video_file, codec="libx264", audio_codec="aac")
+            if video_clips:
+                combined_clip = concatenate_videoclips(video_clips)
+                combined_video_file = os.path.join(output_folder, "combined_video.mp4")
+                combined_clip.write_videofile(combined_video_file, codec="libx264", audio_codec="aac")
 
-#                 combined_video_path = os.path.join(output_folder, "combined_video.mp4")
-#                 return render_template("home/kamus.html", user_input=user_input, combined_video_path=combined_video_path)
-#             else:
-#                 return render_template("home/kamus.html", user_input=user_input, error_message="Data tidak ditemukan untuk kata ini.")
+                combined_video_path = os.path.join(output_folder, "combined_video.mp4")
+                return render_template("home/kamus.html", user_input=user_input, combined_video_path=combined_video_path)
+            else:
+                return render_template("home/kamus.html", user_input=user_input, error_message="Data tidak ditemukan untuk kata ini.")
 
-#     else:
-#         alphabet_set = set('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    else:
+        alphabet_set = set('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
-#         letters_data = []
+        letters_data = []
 
-#         for letter in sorted(alphabet_set):
-#             letter_data = {"letter": letter, "images": [], "videos": []}
+        for letter in sorted(alphabet_set):
+            letter_data = {"letter": letter, "images": [], "videos": []}
 
-#             image_path = os.path.join(output_folder, f"{letter}.png")
+            image_path = os.path.join(output_folder, f"{letter}.png")
 
-#             if os.path.exists(image_path):
-#                 letter_data["images"].append(f"{letter}.png")
+            if os.path.exists(image_path):
+                letter_data["images"].append(f"{letter}.png")
 
-#             video_path = os.path.join(output_folder, f"{letter}.mp4")
+            video_path = os.path.join(output_folder, f"{letter}.mp4")
 
-#             if os.path.exists(video_path):
-#                 letter_data["videos"].append(f"{letter}.mp4")
+            if os.path.exists(video_path):
+                letter_data["videos"].append(f"{letter}.mp4")
 
-#             letters_data.append(letter_data)
+            letters_data.append(letter_data)
 
-#         return render_template("home/kamus.html", letters_data=letters_data)
+        return render_template("home/kamus.html", letters_data=letters_data)
     
 
 @blueprint.route('/terjemahan', methods=['GET'])
